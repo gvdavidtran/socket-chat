@@ -26,6 +26,7 @@ io.on('connection', (socket) => {
     // Everytime new user connects, collect nickname entered and broadcast to rest of users
     socket.on('new user', (name) => {
         users[socket.id] = {nickname: name};
+        console.log(users)
         socket.broadcast.emit('new user connected', users[socket.id].nickname);
     })
 
@@ -38,6 +39,17 @@ io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
         socket.broadcast.emit('chat message', {sender: users[socket.id].nickname, message: msg});
     });
+
+    // 
+    socket.on('userIsTyping', () => {
+        socket.broadcast.emit('anotherUserIsTyping', {sender: users[socket.id].nickname})
+    });
+
+    socket.on('userIsNoLongerTyping', () => {
+        socket.broadcast.emit('anotherUserIsNoLongerTyping', {sender: users[socket.id].nickname})
+    })
+
+
 });
 
 server.listen(5000, () => {

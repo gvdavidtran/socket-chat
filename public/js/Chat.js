@@ -29,5 +29,40 @@ $('#nickname').submit(() => {
         console.log(name)
         $('#messages').append($('<li>').text(name + ' has connected'));
     })
+
+    // onKeyDown
+    var typing = false;
+    var timeout = undefined;
+
+    timeoutFunction = () => {
+      typing = false;
+      socket.emit('userIsNoLongerTyping');
+    }
+
+    $('#m').keydown((e) => {
+        // only record typing if enter not pressed
+        if(e.which!=13 && e.keyCode!=13) {
+            if (typing == false) {
+                typing = true
+                socket.emit('userIsTyping');
+                timeout = setTimeout(timeoutFunction, 5000);
+            } else {
+                clearTimeout(timeout);
+                timeout = setTimeout(timeoutFunction, 5000);
+            }
+        }   
+    });
+
+    // another user is typing
+    socket.on('anotherUserIsTyping', (data) => {
+        $('.is-typing').html(data.sender + ' is typing...');
+    })
+
+    // another user is no longer typing
+    socket.on('anotherUserIsNoLongerTyping', (data) => {
+        $('.is-typing').html('');
+    })
+       
+
     return false;
 })

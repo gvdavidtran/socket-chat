@@ -1,3 +1,11 @@
+html, body{
+  height:100%;
+}
+.app {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
 * { 
     margin: 0; 
     padding: 0; 
@@ -17,8 +25,8 @@ body {
 #chat { 
     background: #000; 
     padding: 3px; 
-    position: fixed; 
-    bottom: 0; 
+/*    position: fixed; 
+    bottom: 0; */
     width: 100%; 
 }
 
@@ -36,10 +44,15 @@ form button {
     padding: 10px; 
 }
 
+.message-area {
+    flex-grow: 1;
+}
+
 #messages { 
     list-style-type: none; 
     margin: 0; 
-    padding: 0; }
+    padding: 0;
+}
 
 #messages li { 
     padding: 5px 10px; }

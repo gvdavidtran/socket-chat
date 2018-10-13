@@ -1,22 +1,29 @@
 <!doctype html>
 <html>
-  <head>
+<head>
     <title>Socket.IO chat</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    
 
-  </head>
-  <body>
-    <form id='nickname' action="">
-      <input id="n" autocomplete="off" placeholder="Enter Nickname" /><button>Submit</button>
-    </form>
-    <ul id="messages"></ul>
-    <form id='chat' action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
-  </body>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-  <script src='/js/Chat.js'></script>
-  <script src='/js/Nickname.js'></script>
+
+</head>
+<body>
+    <div class="app">
+        <form id='nickname' action="">
+            <input id="n" autocomplete="off" placeholder="Enter Nickname" /><button>Submit</button>
+        </form>
+        <div class='message-area'>
+            <ul id="messages"></ul>
+        </div>
+        <div class="is-typing"></div>
+        <form id='chat' action="">
+            <input id="m" autocomplete="off" /><button>Send</button>
+        </form>
+
+    </div>
+
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script src='/js/Chat.js'></script>
+<script src='/js/Nickname.js'></script>
 </html>
