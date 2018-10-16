@@ -19,20 +19,33 @@ app.get('/', (req, res) => {
 
 var users = {};
 
+updateOnlineUsers = () => {
+    io.emit('online users', users);
+}
 
 io.on('connection', (socket) => {
     console.log('a user has connected');
 
+    anotherUserIsNoLongerTyping = () => {
+        io.emit('anotherUserIsNoLongerTyping')
+    }
+
     // Everytime new user connects, collect nickname entered and broadcast to rest of users
     socket.on('new user', (name) => {
-        users[socket.id] = {nickname: name};
+        users[socket.id] = {nickname: name, random: "boom"};
         console.log(users)
         socket.broadcast.emit('new user connected', users[socket.id].nickname);
+        updateOnlineUsers();
     })
 
     // Everytime a user disconnects
     socket.on('disconnect', () => {
         console.log('a user has disconnected');
+        socket.broadcast.emit('user disconnected', users[socket.id].nickname);
+        anotherUserIsNoLongerTyping();
+        delete users[socket.id]
+        console.log(users)
+        updateOnlineUsers();
     });
 
     // Broadcast new messages to all users except sender
@@ -45,12 +58,13 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('anotherUserIsTyping', {sender: users[socket.id].nickname})
     });
 
+    
     socket.on('userIsNoLongerTyping', () => {
-        socket.broadcast.emit('anotherUserIsNoLongerTyping', {sender: users[socket.id].nickname})
+        anotherUserIsNoLongerTyping();
     })
-
-
 });
+
+
 
 server.listen(5000, () => {
     console.log('listening on :5000');

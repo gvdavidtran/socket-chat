@@ -13,9 +13,12 @@ $('#nickname').submit(() => {
     // Emit message on Send
     $('#chat').submit(function(){
         var message = $('#m').val();
-        $('#messages').append($('<li>').text(nickname + ': ' + message ));
-        socket.emit('chat message', message);
-        $('#m').val('');
+        if (message) {
+            $('#messages').append($('<li>').text(nickname + ': ' + message ));
+            socket.emit('chat message', message);
+            $('#m').val('');
+            timeoutFunction();
+        }
         return false;
     });
 
@@ -30,6 +33,10 @@ $('#nickname').submit(() => {
         $('#messages').append($('<li>').text(name + ' has connected'));
     })
 
+    socket.on('user disconnected', (name) => {
+        $('#messages').append($('<li>').text(name + ' has disconnected'));
+    })
+
     // onKeyDown
     var typing = false;
     var timeout = undefined;
@@ -41,6 +48,7 @@ $('#nickname').submit(() => {
 
     $('#m').keydown((e) => {
         // only record typing if enter not pressed
+        console.log(e)
         if(e.which!=13 && e.keyCode!=13) {
             if (typing == false) {
                 typing = true
@@ -59,8 +67,22 @@ $('#nickname').submit(() => {
     })
 
     // another user is no longer typing
-    socket.on('anotherUserIsNoLongerTyping', (data) => {
+    socket.on('anotherUserIsNoLongerTyping', () => {
         $('.is-typing').html('');
+    })
+
+    // update online users list
+
+    socket.on('online users', (users) => {
+        var userList = "";
+        console.log(`userList = ${userList}`)
+        for (var user in users) {
+            var nickname = users[user].nickname
+            console.log(`nickname = ${nickname}`)
+            userList += `<li>${nickname}</li>`;
+            console.log(`userList = ${userList}`)
+        }
+        $('#online').html(userList);
     })
        
 

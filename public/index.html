@@ -7,18 +7,24 @@
 
 </head>
 <body>
-    <div class="app">
-        <form id='nickname' action="">
-            <input id="n" autocomplete="off" placeholder="Enter Nickname" /><button>Submit</button>
-        </form>
-        <div class='message-area'>
-            <ul id="messages"></ul>
+    <div id="app">
+        <div id="online-users">
+            <ul id="online">
+                
+            </ul>
         </div>
-        <div class="is-typing"></div>
-        <form id='chat' action="">
-            <input id="m" autocomplete="off" /><button>Send</button>
-        </form>
-
+        <div id="main">
+            <form id='nickname' action="">
+                <input id="n" autocomplete="off" placeholder="Enter Nickname" /><button>Submit</button>
+            </form>
+            <div class='message-area'>
+                <ul id="messages"></ul>
+            </div>
+            <div class="is-typing"></div>
+            <form id='chat' action="">
+                <input id="m" autocomplete="off" /><button>Send</button>
+            </form>
+        </div>
     </div>
 
 </body>
