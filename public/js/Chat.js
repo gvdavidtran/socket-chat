@@ -42,13 +42,14 @@ $('#nickname').submit(() => {
     var timeout = undefined;
 
     timeoutFunction = () => {
-      typing = false;
-      socket.emit('userIsNoLongerTyping');
+        if (typing == true) {
+            typing = false;
+            socket.emit('userIsNoLongerTyping');
+        }
     }
 
     $('#m').keydown((e) => {
         // only record typing if enter not pressed
-        console.log(e)
         if(e.which!=13 && e.keyCode!=13) {
             if (typing == false) {
                 typing = true
