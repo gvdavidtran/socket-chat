@@ -29,7 +29,7 @@ $('#nickname').submit(() => {
 
     // Display name of new user, everytime new user connects to server
     socket.on('new user connected', (name) => {
-        console.log(name)
+        // console.log(name)
         $('#messages').append($('<li>').text(name + ' has connected'));
     })
 
@@ -73,19 +73,28 @@ $('#nickname').submit(() => {
     })
 
     // update online users list
-
     socket.on('online users', (users) => {
         var userList = "";
-        console.log(`userList = ${userList}`)
+        // console.log(`userList = ${userList}`)
         for (var user in users) {
             var nickname = users[user].nickname
-            console.log(`nickname = ${nickname}`)
+            // console.log(`nickname = ${nickname}`)
             userList += `<li>${nickname}</li>`;
-            console.log(`userList = ${userList}`)
+            // console.log(`userList = ${userList}`)
         }
         $('#online').html(userList);
     })
-       
+    
+    $('#ch1').click(() => {
+        var room = 'ch1';
+        console.log('clicked!!');
+        socket.emit('joining ch1', room);
+
+    })
+
+    socket.on('room message', (data) => {
+        $('#messages').append($('<li>').text(data));
+    }) 
 
     return false;
 })

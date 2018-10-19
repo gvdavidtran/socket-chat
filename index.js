@@ -33,7 +33,7 @@ io.on('connection', (socket) => {
     // Everytime new user connects, collect nickname entered and broadcast to rest of users
     socket.on('new user', (name) => {
         users[socket.id] = {nickname: name, random: "boom"};
-        console.log(users)
+        // console.log(users)
         socket.broadcast.emit('new user connected', users[socket.id].nickname);
         updateOnlineUsers();
     })
@@ -44,7 +44,7 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('user disconnected', users[socket.id].nickname);
         anotherUserIsNoLongerTyping();
         delete users[socket.id]
-        console.log(users)
+        // console.log(users)
         updateOnlineUsers();
     });
 
@@ -62,6 +62,16 @@ io.on('connection', (socket) => {
     socket.on('userIsNoLongerTyping', () => {
         anotherUserIsNoLongerTyping();
     })
+
+    var socketInfo = 'socket info'
+    socket.on('joining ch1', (room) => {
+        console.log(`${socket.id} joining ${room}`)
+        socket.join(room);
+        console.log(socket.room)
+        io.to(room).emit('room message', `${socket.id} joined ${room}`);
+    })
+
+    //io.to('ch1').emit('room message');
 });
 
 
