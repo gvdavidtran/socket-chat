@@ -21,6 +21,9 @@ var users = {};
 let channels = {
     ch1: {
         users: []
+    },
+    ch2: {
+        users: []
     }
 };
 
@@ -68,12 +71,13 @@ io.on("connection", socket => {
             delete users[socket.id];
             // console.log(users)
             updateOnlineUsers();
+            updateChannels();
         }
     });
 
-    // Broadcast new messages to all users except sender
+    // Broadcast new messages to all users in user's current room except sender
     socket.on("chat message", msg => {
-        socket.broadcast.emit("chat message", {
+        socket.to(users[socket.id].channel).emit("chat message", {
             sender: users[socket.id].nickname,
             message: msg
         });

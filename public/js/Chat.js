@@ -99,16 +99,32 @@ $("#nickname").submit(() => {
     });
 
     socket.on("update channels", channels => {
-        for (channel in channels) {
-            $("#channel-list")
-                .append("<li>" + channel + "</li>")
-                .appendChild(subul);
+        var channelsList = document.createElement("ul");
+        channelsList.className = "channel-name";
+        for (var channel in channels) {
+            var li = document.createElement("li");
+
+            li.append(channel);
+            // console.log(li);
+
             var subul = document.createElement("ul");
-            for (user in channel) {
-                subul.append("<li>item</li>");
+            subul.className = "users-in-channel";
+            for (var user of channels[channel].users) {
+                // console.log(`user: ${user}`);
+                var subli = document.createElement("li");
+                subli.innerHTML = user;
+                subul.append(subli);
             }
+            li.append(subul);
+            console.log(li);
+            channelsList.append(li);
         }
+        console.log(channelsList);
+        document.getElementById("channel-list").innerHTML = "";
+        document.getElementById("channel-list").appendChild(channelsList);
     });
+
+    // Changing channel
 
     return false;
 });

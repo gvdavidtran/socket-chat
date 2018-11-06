@@ -1,12 +1,14 @@
 <!doctype html>
 <html>
+
 <head>
     <title>Socket.IO chat</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <link rel="stylesheet" type="text/css" href="/css/style.css">
 
 </head>
+
 <body>
     <div id="app">
         <div id="online-users">
@@ -17,11 +19,7 @@
         </div>
         <div id="channels">
             <h3>channels</h3>
-            <ul id="channel-list">
-                <li id="ch1">Channel 1</li>
-                <li id="ch2">Channel 2</li>
-                <li id="ch3">Channel 3</li>
-            </ul>
+            <div id="channel-list"></div>
         </div>
         <div id="main">
             <form id='nickname' action="">
@@ -42,4 +40,5 @@
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 <script src='/js/Chat.js'></script>
 <script src='/js/Nickname.js'></script>
+
 </html>
