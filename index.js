@@ -33,6 +33,22 @@ updateOnlineUsers = () => {
 
 updateChannels = () => {
     io.emit("update channels", channels);
+    console.log(channels);
+    console.log(users);
+};
+
+removeUserFromChannel = user => {
+    var currentChannel = users[user].channel;
+    var index = channels[currentChannel].users.indexOf(users[user].nickname);
+    if (index > -1) {
+        channels[currentChannel].users.splice(index, 1);
+    }
+};
+
+switchChannels = (user, channel) => {
+    removeUserFromChannel(user);
+    users[user].channel = channel;
+    channels[channel].users.push(users[user].nickname);
 };
 
 io.on("connection", socket => {
@@ -47,7 +63,7 @@ io.on("connection", socket => {
         users[socket.id] = { nickname: name, channel: "ch1" };
         socket.join(users[socket.id].channel);
         channels.ch1.users.push(name);
-        console.log(channels);
+        // console.log(channels);
         socket
             .to(users[socket.id].channel)
             .emit("new user connected", users[socket.id].nickname);
@@ -64,10 +80,7 @@ io.on("connection", socket => {
                 users[socket.id].nickname
             );
             anotherUserIsNoLongerTyping();
-            var index = channels.ch1.users.indexOf(users[socket.id].nickname);
-            if (index > -1) {
-                channels.ch1.users.splice(index, 1);
-            }
+            removeUserFromChannel(socket.id);
             delete users[socket.id];
             // console.log(users)
             updateOnlineUsers();
@@ -83,11 +96,18 @@ io.on("connection", socket => {
         });
     });
 
+    socket.on("switching channel", channel => {
+        switchChannels(socket.id, channel);
+        updateChannels();
+    });
+
     //
     socket.on("userIsTyping", () => {
-        socket.broadcast.emit("anotherUserIsTyping", {
-            sender: users[socket.id].nickname
-        });
+        if (users[socket.id]) {
+            socket.broadcast.emit("anotherUserIsTyping", {
+                sender: users[socket.id].nickname
+            });
+        }
     });
 
     socket.on("userIsNoLongerTyping", () => {

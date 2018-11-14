@@ -88,23 +88,23 @@ $("#nickname").submit(() => {
         $("#online").html(userList);
     });
 
-    $("#ch1").click(() => {
-        var room = "ch1";
-        console.log("clicked!!");
-        socket.emit("joining ch1", room);
-    });
-
     socket.on("room message", data => {
         $("#messages").append($("<li>").text(data));
     });
 
     socket.on("update channels", channels => {
         var channelsList = document.createElement("ul");
-        channelsList.className = "channel-name";
+        channelsList.className = "channels";
         for (var channel in channels) {
             var li = document.createElement("li");
-
+            li.className = "channel-name";
+            // li.id = channel;
             li.append(channel);
+            var joinButton = document.createElement("button");
+            joinButton.className = "join-channel";
+            joinButton.id = channel;
+            joinButton.append("Join Channel");
+            li.append(joinButton);
             // console.log(li);
 
             var subul = document.createElement("ul");
@@ -122,6 +122,23 @@ $("#nickname").submit(() => {
         console.log(channelsList);
         document.getElementById("channel-list").innerHTML = "";
         document.getElementById("channel-list").appendChild(channelsList);
+    });
+
+    // $("#ch1").click(() => {
+    //     var room = "ch1";
+    //     console.log("clicked!!");
+    //     socket.emit("joining ch1", room);
+    // });
+
+    // $("#ch2").click(() => {
+    //     console.log("clicked!!");
+    //     socket.emit("switching channel", "ch2");
+    // });
+
+    $("#channel-list").on("click", "button.join-channel", () => {
+        var channelToJoin = event.target.id;
+        console.log("clicked!!");
+        socket.emit("switching channel", channelToJoin);
     });
 
     // Changing channel
