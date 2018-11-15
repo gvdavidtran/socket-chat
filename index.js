@@ -61,6 +61,7 @@ io.on("connection", socket => {
     // Everytime new user connects, collect nickname entered and broadcast to rest of users
     socket.on("new user", name => {
         users[socket.id] = { nickname: name, channel: "ch1" };
+        socket.leave(socket.id);
         socket.join(users[socket.id].channel);
         channels.ch1.users.push(name);
         // console.log(channels);
@@ -97,6 +98,17 @@ io.on("connection", socket => {
     });
 
     socket.on("switching channel", channel => {
+        socket.leave(users[socket.id].channel);
+        console.log(`${socket.id} joining ${channel}`);
+        socket.join(channel);
+
+        // console.log(io.sockets.adapter.rooms);
+        socket
+            .to(channel)
+            .emit(
+                "room message",
+                `${users[socket.id].nickname} joined ${channel}`
+            );
         switchChannels(socket.id, channel);
         updateChannels();
     });
@@ -104,7 +116,7 @@ io.on("connection", socket => {
     //
     socket.on("userIsTyping", () => {
         if (users[socket.id]) {
-            socket.broadcast.emit("anotherUserIsTyping", {
+            socket.to(users[socket.id].channel).emit("anotherUserIsTyping", {
                 sender: users[socket.id].nickname
             });
         }
@@ -113,17 +125,6 @@ io.on("connection", socket => {
     socket.on("userIsNoLongerTyping", () => {
         anotherUserIsNoLongerTyping();
     });
-
-    var socketInfo = "socket info";
-    socket.on("joining ch1", room => {
-        console.log(`${socket.id} joining ${room}`);
-        socket.join(room);
-        socket.leave(socket.id);
-        console.log(io.sockets.adapter.rooms);
-        io.to(room).emit("room message", `${socket.id} joined ${room}`);
-    });
-
-    //io.to('ch1').emit('room message');
 });
 
 server.listen(5000, () => {
