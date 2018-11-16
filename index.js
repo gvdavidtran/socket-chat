@@ -39,7 +39,7 @@ updateChannels = () => {
 
 removeUserFromChannel = user => {
     var currentChannel = users[user].channel;
-    var index = channels[currentChannel].users.indexOf(users[user].nickname);
+    var index = channels[currentChannel].users.indexOf(users[user].username);
     if (index > -1) {
         channels[currentChannel].users.splice(index, 1);
     }
@@ -48,7 +48,7 @@ removeUserFromChannel = user => {
 switchChannels = (user, channel) => {
     removeUserFromChannel(user);
     users[user].channel = channel;
-    channels[channel].users.push(users[user].nickname);
+    channels[channel].users.push(users[user].username);
 };
 
 io.on("connection", socket => {
@@ -58,16 +58,16 @@ io.on("connection", socket => {
         io.emit("anotherUserIsNoLongerTyping");
     };
 
-    // Everytime new user connects, collect nickname entered and broadcast to rest of users
+    // Everytime new user connects, collect username entered and broadcast to rest of users
     socket.on("new user", name => {
-        users[socket.id] = { nickname: name, channel: "ch1" };
+        users[socket.id] = { username: name, channel: "ch1" };
         socket.leave(socket.id);
         socket.join(users[socket.id].channel);
         channels.ch1.users.push(name);
         // console.log(channels);
         socket
             .to(users[socket.id].channel)
-            .emit("new user connected", users[socket.id].nickname);
+            .emit("new user connected", users[socket.id].username);
         updateOnlineUsers();
         updateChannels();
     });
@@ -78,7 +78,7 @@ io.on("connection", socket => {
             console.log("a user has disconnected");
             socket.broadcast.emit(
                 "user disconnected",
-                users[socket.id].nickname
+                users[socket.id].username
             );
             anotherUserIsNoLongerTyping();
             removeUserFromChannel(socket.id);
@@ -92,7 +92,7 @@ io.on("connection", socket => {
     // Broadcast new messages to all users in user's current room except sender
     socket.on("chat message", msg => {
         socket.to(users[socket.id].channel).emit("chat message", {
-            sender: users[socket.id].nickname,
+            sender: users[socket.id].username,
             message: msg
         });
     });
@@ -107,7 +107,7 @@ io.on("connection", socket => {
             .to(channel)
             .emit(
                 "room message",
-                `${users[socket.id].nickname} joined ${channel}`
+                `${users[socket.id].username} joined ${channel}`
             );
         switchChannels(socket.id, channel);
         updateChannels();
@@ -117,7 +117,7 @@ io.on("connection", socket => {
     socket.on("userIsTyping", () => {
         if (users[socket.id]) {
             socket.to(users[socket.id].channel).emit("anotherUserIsTyping", {
-                sender: users[socket.id].nickname
+                sender: users[socket.id].username
             });
         }
     });

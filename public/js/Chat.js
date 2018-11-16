@@ -1,21 +1,22 @@
-// Only initialize socket after user has entered a nickname
+// Only initialize socket after user has entered a username
 
-// On nickname submit, hide the nickname bar and initialize socket
-$("#nickname").submit(() => {
-    $("#nickname").addClass("hidden");
-    var nickname = $("#n").val();
+// On username submit, hide the username bar and initialize socket
+$("#username").submit(() => {
+    $("#username").addClass("hidden");
+    var username = $("#n").val();
     var socket = io();
-    console.log("user online");
-    console.log(nickname);
 
-    // Emit nickname to server
-    socket.emit("new user", nickname);
+    console.log("user online");
+    console.log(username);
+
+    // Emit username to server
+    socket.emit("new user", username);
 
     // Emit message on Send
     $("#chat").submit(function() {
         var message = $("#m").val();
         if (message) {
-            $("#messages").append($("<li>").text(nickname + ": " + message));
+            $("#messages").append($("<li>").text(username + ": " + message));
             socket.emit("chat message", message);
             $("#m").val("");
             timeoutFunction();
@@ -80,9 +81,9 @@ $("#nickname").submit(() => {
         var userList = "";
         // console.log(`userList = ${userList}`)
         for (var user in users) {
-            var nickname = users[user].nickname;
-            // console.log(`nickname = ${nickname}`)
-            userList += `<li>${nickname}</li>`;
+            var username = users[user].username;
+            // console.log(`username = ${username}`)
+            userList += `<li>${username}</li>`;
             // console.log(`userList = ${userList}`)
         }
         $("#online").html(userList);
