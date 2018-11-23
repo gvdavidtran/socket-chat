@@ -3,7 +3,7 @@
 // On username submit, hide the username bar and initialize socket
 $("#username").submit(() => {
     $("#username").addClass("hidden");
-    var username = $("#n").val();
+    var username = $("#u").val();
     var socket = io();
 
     console.log("user online");
@@ -142,7 +142,13 @@ $("#username").submit(() => {
         socket.emit("switching channel", channelToJoin);
     });
 
-    // Changing channel
+    $("#create-channel").submit(() => {
+        var newChannel = $("#c").val();
+        $("#c").val("");
+        console.log("creating", newChannel);
+        socket.emit("creating new channel", newChannel);
+        return false;
+    });
 
     return false;
 });

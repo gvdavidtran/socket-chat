@@ -51,6 +51,12 @@ switchChannels = (user, channel) => {
     channels[channel].users.push(users[user].username);
 };
 
+createChannel = newChannel => {
+    channels[newChannel] = {
+        users: []
+    };
+};
+
 io.on("connection", socket => {
     console.log("a user has connected");
 
@@ -124,6 +130,15 @@ io.on("connection", socket => {
 
     socket.on("userIsNoLongerTyping", () => {
         anotherUserIsNoLongerTyping();
+    });
+
+    socket.on("creating new channel", newChannel => {
+        createChannel(newChannel);
+        socket.leave(users[socket.id].channel);
+        console.log(`${socket.id} joining ${newChannel}`);
+        socket.join(newChannel);
+        switchChannels(socket.id, newChannel);
+        updateChannels();
     });
 });
 

@@ -1,43 +1,42 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+    <head>
+        <title>Socket.IO chat</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<head>
-    <title>Socket.IO chat</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    </head>
 
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
-
-</head>
-
-<body>
-    <div id="app">
-        <div id="online-users">
-            <h3>online users</h3>
-            <ul id="online">
-
-            </ul>
-        </div>
-        <div id="channels">
-            <h3>channels</h3>
-            <div id="channel-list"></div>
-        </div>
-        <div id="main">
-            <form id='username' action="">
-                <input id="n" autocomplete="off" placeholder="Enter username" /><button>Submit</button>
-            </form>
-            <div class='message-area'>
-                <ul id="messages"></ul>
+    <body>
+        <div id="app">
+            <div id="online-users">
+                <h3>online users</h3>
+                <ul id="online"></ul>
             </div>
-            <div class="is-typing"></div>
-            <form id='chat' action="">
-                <input id="m" autocomplete="off" /><button>Send</button>
-            </form>
+            <div id="channels">
+                <h3>channels</h3>
+                <div id="channel-list"></div>
+                <form id="create-channel" action="">
+                    <input id="c" autocomplete="off" /><button>Create</button>
+                </form>
+            </div>
+            <div id="main">
+                <form id="username" action="">
+                    <input
+                        id="u"
+                        autocomplete="off"
+                        placeholder="Enter username"
+                    /><button>Submit</button>
+                </form>
+                <div class="message-area"><ul id="messages"></ul></div>
+                <div class="is-typing"></div>
+                <form id="chat" action="">
+                    <input id="m" autocomplete="off" /><button>Send</button>
+                </form>
+            </div>
         </div>
-    </div>
-
-</body>
-<script src="/socket.io/socket.io.js"></script>
-<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-<script src='/js/Chat.js'></script>
-
+    </body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="/js/Chat.js"></script>
 </html>
