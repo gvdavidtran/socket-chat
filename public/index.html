@@ -17,7 +17,9 @@
                 <h3>channels</h3>
                 <div id="channel-list"></div>
                 <form id="create-channel" action="">
-                    <input id="c" autocomplete="off" /><button>Create</button>
+                    <input id="c" autocomplete="off" maxlength="14" /><button>
+                        Create
+                    </button>
                 </form>
             </div>
             <div id="main">
@@ -26,12 +28,17 @@
                         id="u"
                         autocomplete="off"
                         placeholder="Enter username"
+                        maxlength="15"
                     /><button>Submit</button>
                 </form>
                 <div class="message-area"><ul id="messages"></ul></div>
                 <div class="is-typing"></div>
                 <form id="chat" action="">
-                    <input id="m" autocomplete="off" /><button>Send</button>
+                    <input
+                        id="m"
+                        autocomplete="off"
+                        placeholder="Type here..."
+                    /><button>Send</button>
                 </form>
             </div>
         </div>
